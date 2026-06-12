@@ -19,6 +19,16 @@
             "user_id": 4,
             "name": "Milton",
             "email": "milton@example.com"
+        },
+        {
+            "user_id": 5,
+            "name": "Kelsey",
+            "email": "kelsey@example.com"
+        },
+        {
+            "user_id": 6,
+            "name": "Kangethe",
+            "email": "kangethe@example.com"
         }
     ],
     "projects": [

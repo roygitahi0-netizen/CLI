@@ -14,6 +14,7 @@ A command-line project management tool for team developers to manage users, proj
 ## Installation
 
 ### Prerequisites
+
 - Python 3.8 or higher
 - pipenv (recommended) or pip
 
