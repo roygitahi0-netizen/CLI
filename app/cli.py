@@ -1,6 +1,7 @@
 import argparse
 from rich.console import Console
 from rich.table import Table
+from rich.prompt import Confirm
 
 from app.models import User, Project, Task
 from app.storage import load_data, save_data, generate_id
@@ -29,6 +30,27 @@ def list_users(args):
     table.add_column("Email")
 
     for user in data["users"]:
+        table.add_row(str(user["user_id"]), user["name"], user["email"])
+
+    console.print(table)
+
+
+def search_users(args):
+    data = load_data()
+    keyword = args.keyword.lower()
+
+    results = [
+        user for user in data["users"]
+        if keyword in user["name"].lower()
+        or keyword in user["email"].lower()
+    ]
+
+    table = Table(title=f"Search Results for '{args.keyword}'")
+    table.add_column("ID")
+    table.add_column("Name")
+    table.add_column("Email")
+
+    for user in results:
         table.add_row(str(user["user_id"]), user["name"], user["email"])
 
     console.print(table)
@@ -191,6 +213,34 @@ def list_tasks(args):
     console.print(table)
 
 
+def search_tasks(args):
+    data = load_data()
+    keyword = args.keyword.lower()
+
+    results = [
+        task for task in data["tasks"]
+        if keyword in task["title"].lower()
+    ]
+
+    table = Table(title=f"Search Results for '{args.keyword}'")
+    table.add_column("ID")
+    table.add_column("Title")
+    table.add_column("Project ID")
+    table.add_column("Contributors")
+    table.add_column("Completed")
+
+    for task in results:
+        table.add_row(
+            str(task["task_id"]),
+            task["title"],
+            str(task["project_id"]),
+            ", ".join(task["contributors"]),
+            "Yes" if task["completed"] else "No"
+        )
+
+    console.print(table)
+
+
 def list_all(args):
     data = load_data()
 
@@ -279,6 +329,15 @@ def complete_task(args):
 def delete_user(args):
     data = load_data()
 
+    user = next((u for u in data["users"] if u["user_id"] == args.user_id), None)
+    if not user:
+        console.print("[red]User not found.[/red]")
+        return
+
+    if not Confirm.ask(f"[yellow]Are you sure you want to delete user '{user['name']}'?[/yellow]"):
+        console.print("[yellow]Deletion cancelled.[/yellow]")
+        return
+
     data["users"] = [
         user for user in data["users"]
         if user["user_id"] != args.user_id
@@ -296,6 +355,15 @@ def delete_user(args):
 def delete_project(args):
     data = load_data()
 
+    project = next((p for p in data["projects"] if p["project_id"] == args.project_id), None)
+    if not project:
+        console.print("[red]Project not found.[/red]")
+        return
+
+    if not Confirm.ask(f"[yellow]Are you sure you want to delete project '{project['title']}'?[/yellow]"):
+        console.print("[yellow]Deletion cancelled.[/yellow]")
+        return
+
     data["projects"] = [
         project for project in data["projects"]
         if project["project_id"] != args.project_id
@@ -312,6 +380,15 @@ def delete_project(args):
 
 def delete_task(args):
     data = load_data()
+
+    task = next((t for t in data["tasks"] if t["task_id"] == args.task_id), None)
+    if not task:
+        console.print("[red]Task not found.[/red]")
+        return
+
+    if not Confirm.ask(f"[yellow]Are you sure you want to delete task '{task['title']}'?[/yellow]"):
+        console.print("[yellow]Deletion cancelled.[/yellow]")
+        return
 
     data["tasks"] = [
         task for task in data["tasks"]
@@ -335,6 +412,13 @@ def build_parser():
 
     list_users_parser = subparsers.add_parser("list-users", help="List all users")
     list_users_parser.set_defaults(func=list_users)
+
+    search_users_parser = subparsers.add_parser(
+        "search-users",
+        help="Search users by name or email"
+    )
+    search_users_parser.add_argument("--keyword", required=True)
+    search_users_parser.set_defaults(func=search_users)
 
     add_project_parser = subparsers.add_parser("add-project", help="Add a new project")
     add_project_parser.add_argument("--title", required=True)
@@ -389,6 +473,13 @@ def build_parser():
     list_tasks_parser = subparsers.add_parser("list-tasks", help="List tasks in a project")
     list_tasks_parser.add_argument("--project-id", type=int, required=True)
     list_tasks_parser.set_defaults(func=list_tasks)
+
+    search_tasks_parser = subparsers.add_parser(
+        "search-tasks",
+        help="Search tasks by title"
+    )
+    search_tasks_parser.add_argument("--keyword", required=True)
+    search_tasks_parser.set_defaults(func=search_tasks)
 
     list_all_parser = subparsers.add_parser(
         "list-all",

@@ -29,19 +29,30 @@
             "user_id": 6,
             "name": "Kangethe",
             "email": "kangethe@example.com"
+        },
+        {
+            "user_id": 7,
+            "name": "Jane Kate",
+            "email": "jane@example.com"
         }
     ],
     "projects": [
         {
             "project_id": 1,
             "title": "Advanced CLI Tracker",
-            "description": "Python project management system",
+            "description": "A full-stack e-commerce platform with payment integration",
             "user_id": 1
         },
         {
             "project_id": 2,
             "title": "Test Project",
             "description": "Testing CLI",
+            "user_id": 1
+        },
+        {
+            "project_id": 3,
+            "title": "Project Title",
+            "description": "A senior dev at an e-commerce company",
             "user_id": 1
         }
     ],
@@ -54,6 +65,26 @@
                 "Roy"
             ],
             "completed": true
+        },
+        {
+            "task_id": 2,
+            "title": "Task Title",
+            "project_id": 1,
+            "contributors": [
+                "John Doe",
+                "Alice Smith"
+            ],
+            "completed": false
+        },
+        {
+            "task_id": 3,
+            "title": "Menu Title",
+            "project_id": 2,
+            "contributors": [
+                "Jane Kate",
+                "Kangethe"
+            ],
+            "completed": false
         }
     ]
 }
