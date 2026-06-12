@@ -1,0 +1,49 @@
+{
+    "users": [
+        {
+            "user_id": 1,
+            "name": "Roy",
+            "email": "RoyG@example.com"
+        },
+        {
+            "user_id": 2,
+            "name": "Marks Muina",
+            "email": "Marks@example.com"
+        },
+        {
+            "user_id": 3,
+            "name": "Derrick",
+            "email": "derrick@example.com"
+        },
+        {
+            "user_id": 4,
+            "name": "Milton",
+            "email": "milton@example.com"
+        }
+    ],
+    "projects": [
+        {
+            "project_id": 1,
+            "title": "Advanced CLI Tracker",
+            "description": "Python project management system",
+            "user_id": 1
+        },
+        {
+            "project_id": 2,
+            "title": "Test Project",
+            "description": "Testing CLI",
+            "user_id": 1
+        }
+    ],
+    "tasks": [
+        {
+            "task_id": 1,
+            "title": "Test Task",
+            "project_id": 1,
+            "contributors": [
+                "Roy"
+            ],
+            "completed": true
+        }
+    ]
+}
